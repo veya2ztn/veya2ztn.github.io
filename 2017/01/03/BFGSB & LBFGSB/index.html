@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="BFGSB &amp;amp; LBFGSBIn this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n">
+<meta name="description" content="In this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n\rightarrow R $ is">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Veya's">
+<meta property="og:title" content="BFGSB & LBFGSB">
 <meta property="og:url" content="http://veya-ztn.xyz/2017/01/03/BFGSB & LBFGSB/index.html">
 <meta property="og:site_name" content="Veya's">
-<meta property="og:description" content="BFGSB &amp;amp; LBFGSBIn this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n">
-<meta property="og:updated_time" content="2017-01-03T10:18:46.050Z">
+<meta property="og:description" content="In this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n\rightarrow R $ is">
+<meta property="og:updated_time" content="2017-01-03T11:01:35.908Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Veya's">
-<meta name="twitter:description" content="BFGSB &amp;amp; LBFGSBIn this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n">
+<meta name="twitter:title" content="BFGSB & LBFGSB">
+<meta name="twitter:description" content="In this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n\rightarrow R $ is">
 
 
 
@@ -127,7 +127,7 @@
 
 
 
-  <title>  | Veya's </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title> BFGSB & LBFGSB | Veya's </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -264,7 +264,7 @@
             
             
               
-                
+                BFGSB & LBFGSB
               
             
           </h1>
@@ -315,7 +315,7 @@
       
 
       
-        <h1 id="BFGSB-amp-LBFGSB"><a href="#BFGSB-amp-LBFGSB" class="headerlink" title="BFGSB &amp; LBFGSB"></a>BFGSB &amp; LBFGSB</h1><p>In this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n\rightarrow R $ is arbitrary, so we make deal that we will not use the specific character of problem like symmetry, periodicity or other things. </p>
+        <p>In this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n\rightarrow R $ is arbitrary, so we make deal that we will not use the specific character of problem like symmetry, periodicity or other things. </p>
 <p>This method is firstly used for my study to find the minima energy structure of cluster. However, since it is a general method for numerical mathematic model, it flames at many fields. For example, machine learning. </p>
 <p>We will start from a simple introduce about Broyden–Fletcher–Goldfarb–Shanno algorithm (BFGS) and then to talk about how to create a modified algorithm for boundary problem.</p>
 <a id="more"></a>
@@ -359,28 +359,20 @@
 <li><em>An active set limited memory BFGS algorithm for large-scale bound constrained optimization</em></li>
 </ol>
 <h3 id="A-and-I"><a href="#A-and-I" class="headerlink" title="$A$ and $I$"></a>$A$ and $I$</h3><h3 id="Cauchy-point"><a href="#Cauchy-point" class="headerlink" title="Cauchy point"></a>Cauchy point</h3><p>The Cauchy point can be recognized as what I said above. Of course, we can easily regard it as an modified term due to the additional bound condition. We just stop at every time the new coordinate active (touch the bound) and compute if there is a local min point.</p>
-<p>Every search stop point can be identified like<br>$$<br>t_i=\left{<br>\begin{aligned}<br>(x_i^0-u_i)/g_i \quad if \, g_i<0\\ (x_i^0-l_i)="" g_i="" \quad="" if="" \,="">0\\<br>\infty \quad if \, g_i&lt;0\\<br>\end{aligned}<br>\right.<br>$$<br>Sort ${t_i}$, begin from the smallest $t_i$ we can get interval $[t^1,t^2],[t^2,t^3]\dots$ where $t^1$ is the smallest $t_i$</0\\></p>
-<p>In every interval, we compute the min value and min point (now it is a 1D system) if the  min point locate in the interval, stop search and return point (Cauchy point), otherwise continue do processing.<br>$$<br>\begin{align}<br>&amp; \mbox{For $i=1,2,\dots,n $ and $ X=(x_1,x_2,\dots,x_n)^T$}\\<br>&amp;t_i=\left{\begin{aligned}(x_i-u_i)/g_i \quad if \, g_i<0\\(x_i-l_i) g_i="" \quad="" if="" \,="">0\\\infty \quad if \, g_i<0\\\end{aligned}\right.\\ &d_i="\left\{\begin{aligned}0\quad" if="" \,="" t_i="0\\-g_i" \quad="" otherwise\\\end{aligned}\right.\\="" &="" p="W^Td\\" c="(0,0,\dots,0)^T\\" f'="-d^Td\\" f''="-\theta" f'-p^tmp\\="" \delta="" t_{min}="-\frac{f'}{f’}\\" t_{old}="0\\" \mbox{find="" the="" min="" $t_i="">0$, mark $t_b$,and make $t_b=0$}\\
-& \Delta t=t_b\\
-& \mbox{While  $\Delta t_{min}>\Delta t $ do}\\
-& x_b^c=\left\{\begin{aligned}u_b\quad if \, d_b<0\\l_b \quad="" if="" \,="" d_b="">0\\\end{aligned}\right .\\
-& z_b=x_b^c-x_b,x_b=x_b^c\\
-& c=c+\Delta t p\\
-& f'=f'+\Delta f''+g_b^2+\theta g_bz_b-g_b\omega_b^TMc\\
-& f''=f''-\theta g_b^2-2g_b\omega_b^T Mp-g_b^2\omega_b^TM\omega_b\\
-& p=p+g_b\omega_b\\
-& d_b=0\\
-& \Delta t_{min}=-\frac{f'}{f’}\\
-& t_{old}=t_b (last\, one)\\
-& \mbox{find the min $t_i>0$, mark $t_b$,and make $t_b=0$}\\<br>&amp; \Delta t=t_b-t_{b,last}\\<br>&amp; \mbox{end while}\\<br>&amp; \Delta t_{min}=max{\Delta t_{min},0} \\<br>&amp; t_{old}=t_{old}+ \Delta t_{min}\\<br>&amp; X = X + t_{old} d\\<br>&amp;c=c+\Delta t_{min}p\\<br>\end{align}<br>$$</0\\l_b></0\\\end{aligned}\right.\\></0\\(x_i-l_i)></p>
+<p>Every search stop point can be identified like</p>
+<p>$$<br>\begin{array}{rl}<br>&amp;t_i=(x_i^0-u_i)/g_i &amp; if \,  g_i  &gt;0 \\<br>&amp;t_i=(x_i^0-l_i)/g_i  &amp; if \,   g_i &lt;0 \\<br>&amp;t_i=\infty               &amp; if \,   g_i =0<br>\end{array}<br>$$</p>
+<p>$$<br>\begin{array}{rl}<br>&amp;d_i=0 &amp; if \,t_i=0\\<br>&amp;d_i=-g_i &amp; if \,otherwise\\<br>\end{array}<br>$$</p>
+<p>Sort ${t_i}$, begin from the smallest $t_i$ we can get interval $[t^1,t^2],[t^2,t^3]\dots$ where $t^1$ is the smallest $t_i$</p>
+<p>In every interval, we compute the min value and min point (now it is a 1D system) if the  min point locate in the interval, stop search and return point (Cauchy point), otherwise continue do processing.</p>
+<p>$$<br>\begin{align}<br>&amp; \mbox{For $i=1,2,\dots,n $ and $ X=(x_1,x_2,\dots,x_n)^T$}\\<br>&amp; p=W^Td\\<br>&amp; c=(0,0,\dots,0)^T\\<br>&amp; f’=-d^Td\\<br>&amp; f’’=-\theta f’-p^TMp\\<br>&amp; \Delta t_{min}=-\frac{f’}{f’}\\<br>&amp; t_{old}=0\\<br>&amp; \mbox{find the min $t_i&gt;0$, mark $t_b$,and make $t_b=0$}\\<br>&amp; \Delta t=t_b\\<br>&amp; \mbox{While  $\Delta t_{min}&gt;\Delta t $ do}\\<br>&amp; \mbox{$x_b^c=u_b$ if $d_b &lt; 0$}\\<br>&amp; \mbox{$x_b^c=l_b$  if $d_b &gt; 0$}\\<br>&amp; z_b=x_b^c-x_b,x_b=x_b^c\\<br>&amp; c=c+\Delta t p\\<br>&amp; f’=f’+\Delta f’’+g_b^2+\theta g_bz_b-g_b\omega_b^TMc\\<br>&amp; f’’=f’’-\theta g_b^2-2g_b\omega_b^T Mp-g_b^2\omega_b^TM\omega_b\\<br>&amp; p=p+g_b\omega_b\\<br>&amp; d_b=0\\<br>&amp; \Delta t_{min}=-\frac{f’}{f’}\\<br>&amp; t_{old}=t_b (last\, one)\\<br>&amp; \mbox{find the min $t_i&gt;0$, mark $t_b$,and make $t_b=0$}\\<br>&amp; \Delta t=t_b-t_{b,last}\\<br>&amp; \mbox{end while}\\<br>&amp; \Delta t_{min}=max{\Delta t_{min},0} \\<br>&amp; t_{old}=t_{old}+ \Delta t_{min}\\<br>&amp; X = X + t_{old} d\\<br>&amp;c=c+\Delta t_{min}p\\<br>\end{align}<br>$$</p>
 <p>in order to apply this processing, we need set the $\theta$ before, this is the value we use for LBFGS<br>$$<br>B_k=\theta I - W_kM_kW_k^T<br>$$</p>
 <p>$$<br>H_k^{-1}=\frac{I}{\theta}+\bar{W_k}\bar{M_k}\bar{W_k}^T<br>$$</p>
 <p>where $B_k$ is the approximate matrix for Hessian matrix. And the $H_k^{-1}$ is the inverse matrix.</p>
 <p>You will find the BFGS updating rule is quite different from above, this is the another representation. More details, followed</p>
 <p> <em>REPRESENTATIONSOFQUASINEWTONMATRICES AND THEIR USE IN LIMITED MEMORY METHODS</em><br>$$<br>W_k=[Y_k \quad \theta S_k] \quad \bar{W_k}=[\frac{Y_k}{\theta}\quad S_k]<br>$$</p>
 <p>$$<br>D_k=diag[s_{k-m}^Ty_{k-m},\dots,s_{k-1}^Ty_{k-1}]<br>$$</p>
-<p>$$<br>(L_k)_{ij}=\left{\begin{aligned} s_{k-m-1+i}^T y_{k-m-1+i}\quad if \, i&gt;j\\<br>0\quad  otherwise\\\end{aligned}\right.<br>$$</p>
-<p>$$<br>(R_k)_{ij}=\left{\begin{aligned} s_{k-m-1+i}^T y_{k-m-1+i}\quad if \, i \le j\\<br>0\quad  otherwise\\\end{aligned}\right.<br>$$</p>
+<p>$$<br>\begin{array} {rl}&amp;(L_k)_{ij}=s_{k-m-1+i}^T y_{k-m-1+i}&amp; if \, i&gt;j\\<br>&amp;(L_k)_{ij}=0&amp;otherwise\\\end{array}<br>$$</p>
+<p>$$<br>\begin{array}{rl}&amp; (R_k)_{ij}=s_{k-m-1+i}^T y_{k-m-1+i}&amp; if \, i \le j\\<br>&amp;(R_k)_{ij}=0&amp;  otherwise\end{array}<br>$$</p>
 <p>$$<br>M_k=\left[\begin{aligned}<br>&amp;-D_k&amp;L_k^T\\<br>&amp;L_k&amp;\theta S_k^TS_k\\<br>\end{aligned}\right ]^{-1}<br>$$</p>
 <p>$$<br>\bar{M_k}=\left[\begin{aligned}<br>&amp;0&amp;-R_k^{-1}\\<br>&amp;-R_k^{-T}&amp;R_k^{-T}(D_k+Y_k^TY_k/\theta)R_k^{-1}\\<br>\end{aligned}\right ]<br>$$</p>
 <h3 id="Direction"><a href="#Direction" class="headerlink" title="Direction"></a>Direction</h3><p>we after using the Cauchy point as our start point to apply a Quasi-Newton method in the non-active para subspace. The first thing is to determine a direction. </p>
@@ -562,7 +554,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#BFGSB-amp-LBFGSB"><span class="nav-number">1.</span> <span class="nav-text">BFGSB & LBFGSB</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Newton’s-method"><span class="nav-number">1.1.</span> <span class="nav-text">Newton’s method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Main-idea"><span class="nav-number">1.1.1.</span> <span class="nav-text">Main idea</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BFGS"><span class="nav-number">1.1.2.</span> <span class="nav-text">BFGS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BFGS-B-amp-L-BFGS-B"><span class="nav-number">1.2.</span> <span class="nav-text">BFGS-B & L-BFGS-B</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-outline-of-algorithm"><span class="nav-number">1.2.1.</span> <span class="nav-text">The outline of algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-and-I"><span class="nav-number">1.2.2.</span> <span class="nav-text">$A$ and $I$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cauchy-point"><span class="nav-number">1.2.3.</span> <span class="nav-text">Cauchy point</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Direction"><span class="nav-number">1.2.4.</span> <span class="nav-text">Direction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#If-no-L"><span class="nav-number">1.3.</span> <span class="nav-text">If no L?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Code"><span class="nav-number">2.</span> <span class="nav-text">Code</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Postscript"><span class="nav-number">2.1.</span> <span class="nav-text">Postscript</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Newton’s-method"><span class="nav-number">1.</span> <span class="nav-text">Newton’s method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Main-idea"><span class="nav-number">1.1.</span> <span class="nav-text">Main idea</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BFGS"><span class="nav-number">1.2.</span> <span class="nav-text">BFGS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BFGS-B-amp-L-BFGS-B"><span class="nav-number">2.</span> <span class="nav-text">BFGS-B & L-BFGS-B</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-outline-of-algorithm"><span class="nav-number">2.1.</span> <span class="nav-text">The outline of algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-and-I"><span class="nav-number">2.2.</span> <span class="nav-text">$A$ and $I$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cauchy-point"><span class="nav-number">2.3.</span> <span class="nav-text">Cauchy point</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Direction"><span class="nav-number">2.4.</span> <span class="nav-text">Direction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#If-no-L"><span class="nav-number">3.</span> <span class="nav-text">If no L?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Code"><span class="nav-number"></span> <span class="nav-text">Code</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Postscript"><span class="nav-number">1.</span> <span class="nav-text">Postscript</span></a></li></ol></div>
             
 
           </div>
