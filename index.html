@@ -238,6 +238,495 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://veya-ztn.xyz/2017/01/05/Wang-Landau/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Veya">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Veya's">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Veya's" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/05/Wang-Landau/" itemprop="url">
+                  Wang-Landau Sampling
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-05T02:12:21-08:00">
+                2017-01-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://en.wikipedia.org/wiki/Wang_and_Landau_algorithm" target="_blank" rel="external">Wikipedia: Wang and Landau algorithm</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">The Wang and Landau algorithm is used to obtain the density of states of a system characterized by a cost function. It uses a non-Markovian stochastic process which asymptotically converges to a multicanonical ensemble. The major consequence is that this sampling distribution leads to a simulation where the energy barriers are invisible. This means that the algorithm visits all the accessible states (favorable and less favorable) much faster than a Metropolis algorithm</div></pre></td></tr></table></figure>
+<h2 id="Simple-History"><a href="#Simple-History" class="headerlink" title="Simple History"></a>Simple History</h2><p>In the history of Wang-Landau algorithm, it is first used for calculate the free energy or the partition function for a statistic system. Because for an equilibrium state, all the property of system can derivate from thermodynamic quantity like free energy.</p>
+<p>Then, due to its property that can fast visit all the state, this method is used for jumping out from local min trap and to find global min.</p>
+<h2 id="Main-Idea"><a href="#Main-Idea" class="headerlink" title="Main Idea"></a>Main Idea</h2><p>If a system can be regard as a physics statistic <a href="https://en.wikipedia.org/wiki/Canonical_ensemble" target="_blank" rel="external">canonical system</a> and every configuration map to a certain cost (energy). Then we can use the state density to suggest the probability of energy. More commonly, a canonical system is at energy $E$ and $E+dE$ with probability<br>$$<br>p(E)dE=g(E)\exp(-\beta E)dE<br>$$<br>This is all the thing where we start!</p>
+<h3 id="Ordinary-Monte-Carlo-Sampling"><a href="#Ordinary-Monte-Carlo-Sampling" class="headerlink" title="Ordinary Monte-Carlo Sampling"></a>Ordinary Monte-Carlo Sampling</h3><p>Before we talk about the nature of Wang-Landau Sampling, it is necessary to discuss the normal processing our physicists using to calculate the mean value (or observation value) —— <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method_in_statistical_physics" target="_blank" rel="external">Monte-Carlo Sampling</a></p>
+<p>For this purpose, the Monte-Carlo is only use for sampling a probability distribution, like:</p>
+<p>if we want to calculate the average of physics quantity $A$<br>$$<br>\left<a\right>=\int_{all} A(\vec{r})\frac{e^{-\beta E(\vec{r})}}{Z}d\vec{r}<br>$$<br>where $Z$ is the partition function<br>$$<br>Z= \int_{all} e^{-\beta E_{\vec{r}}}d\vec{r}<br>$$<br>we can regard $\frac{e^{-\beta E(\vec{r})}}{Z}$ as a term for probability $\rho(\vec{r})$ so that<br>$$<br>\left<a\right>=\int_{all} A(\vec{r})\rho(\vec{r})d\vec{r}<br>$$<br>So that if the variable $A$ happened as $\rho$, we can get $\left<a\right>$ directly.</a\right></a\right></a\right></p>
+<h4 id="computing-drawback"><a href="#computing-drawback" class="headerlink" title="computing drawback"></a>computing drawback</h4><p>It is obvious that we can compute one $\left<a\right>$ every time we set a $\beta=\frac{1}{k_bT}$.</a\right></p>
+<h3 id="WL-Sampling"><a href="#WL-Sampling" class="headerlink" title="WL Sampling"></a>WL Sampling</h3><p>We can use another formula to calculate average<br>$$<br>\left<a\right>=\int_{all} A(E)g(E)e^{-\beta E}dE<br>$$<br>notice that $A(\vec{r})$ now become function of energy $E$.</a\right></p>
+<p> Since the $g(E)$ is independent  from temperature $T$. Why not set $\beta=0$？</p>
+<p>Now, we arrive Wang and Landau thought!</p>
+<p>if $\beta=0$, the probability for canonical system at energy $E$ and $E+dE$ become<br>$$<br>p(E)dE=g(E)dE<br>$$<br>which is mean, now the energy distribution follow $g(E)$.</p>
+<p>So, we start to talk about main idea of <strong>feasibility</strong>!</p>
+<ol>
+<li><p>We know that if the system is under canonical distribution (<a href="https://en.wikipedia.org/wiki/Detailed_balance" target="_blank" rel="external">detailed balance</a>), the energy distribution follow $\rho(E)=g(E)$. So, if we using $\frac{1}{g(E)}$ as a sampling possibility for each $E$ we will get a flat histogram! </p>
+</li>
+<li><p>But, of course, the system cannot be the correct energy distribution, and the $g(E)$ which is regard as the possibility of distribution $E$ is depend on distribution $E$</p>
+<p>$$<br>g(E) \leftrightarrow Distribution<br>$$</p>
+</li>
+<li><p>If we apply a function $\mathfrak{F}$, which is $g_{n+1}=\mathfrak{F}(g_n)$ and it can always converge to $g_N=g_{aim}$</p>
+</li>
+</ol>
+<p>That is make our sampling success.</p>
+<p>Follow the processing provided by Wang-Landau Algorithm<br>$$<br>p(E_1\rightarrow E_2)=\min [\frac{g(E_1)}{g(E_2)},1]<br>$$<br>And modify the $g(E)$ using — if $E_i$ is chosen to jump<br>$$<br>g(E_i)=factor \times g(E_i)<br>$$<br>And convergence processing — after certain step<br>$$<br>f\leftarrow f/2<br>$$<br>we hope we can believe that our method is universal.</p>
+<p><strong>However</strong>,  no one proved its analysis convergence and it obviously exists some problems.</p>
+<p>First, the jumping rule<br>$$<br>p(E_1\rightarrow E_2)=\min [\frac{g(E_1)}{g(E_2)},1]<br>$$<br>must be correct followed<br>$$<br>p(E_1\rightarrow E_2)=\min [\frac{\rho(E_2\rightarrow E_1)/g(E_2)}{\rho(E_1\rightarrow E_2)/g(E_1)},1]<br>$$<br>The $\rho(E_1\rightarrow E_2)$ and $\rho(E_2\rightarrow E_1)$ is intrinsic possibility for one particle jumps from this energy to another, we always set them are equal $\rho(E_1\rightarrow E_2)=\rho(E_2\rightarrow E_1)$  but no one can guarantee that.</p>
+<p>Second, It was later shown that updating the f by constantly dividing by two can lead to <a href="http://aip.scitation.org/doi/10.1063/1.2803061" target="_blank" rel="external">saturation errors</a>.A small modification to the Wang and Landau method to avoid this problem is to use the f factor proportional to $1/t$, where $t$ is proportional to the number of steps of the simulation.</p>
+<h2 id="Remarkable-Point"><a href="#Remarkable-Point" class="headerlink" title="Remarkable Point"></a>Remarkable Point</h2><p>The remarkable trick is using $e^{S(E)}$ to replace $g(E)$ and then we compute<br>$$<br>\log p(E_1\rightarrow E_2)=\min [S(E_1)-S(E_2),1]<br>$$</p>
+<p>$$<br>S(E_i)=S(E_i)+\bar{f}<br>$$</p>
+<p>This trick can simplify computation and what more:</p>
+<p>The exponent form means that the jumping possibility ( or the jumping wall ) are exponent increase! Which can be regard as a reason that why WL sampling can <strong>quickly visiting all the available energy spectrum</strong>.</p>
+<h2 id="Why-it-can-used-for-not-statistic-system"><a href="#Why-it-can-used-for-not-statistic-system" class="headerlink" title="Why it can used for not statistic system?"></a>Why it can used for not statistic system?</h2><p>Up to know, what we only talk about is that how the WL sampling useful for statistic physics. But, actually, many people try to apply it to find the global min problem, and maybe other problem.</p>
+<p>Why? That is because we have the brief — believe its continues.</p>
+<p>Remember the natural power of this sampling:  </p>
+<p><strong>Quickly Visiting ALL the available energy spectrum</strong>.</p>
+<p>Let me show you an instinctive example.</p>
+<p>First, we need to find the min of a very smooth function.</p>
+<p><img src="http://7xseg9.com1.z0.glb.clouddn.com/image3.jpg" alt="image3"></p>
+<p>Using the simple local min method ( if it is a multi-variable function, using, e.g, GFBS ), we can easily get the min position</p>
+<p><img src="http://7xseg9.com1.z0.glb.clouddn.com/image4.jpg" alt="image4"></p>
+<p>However, in practice, ( for most complex multi-variable problem), the function is not smooth and such bumpiness. (for multi-variable, image is not 1D but the bumpiness is can be imaged.)</p>
+<p><img src="http://7xseg9.com1.z0.glb.clouddn.com/image5.jpg" alt="image5"></p>
+<p>How to get the global min? </p>
+<p><img src="http://7xseg9.com1.z0.glb.clouddn.com/image7.jpg" alt="image7"></p>
+<p>If we can search the red point and then using determined optimization, we can actually arrive to global min.</p>
+<p>However,  why it will happen? For what, we can say that “I must touch the critical point once or more”?</p>
+<p>Wang-Landau Sampling can <strong>Quickly Visiting ALL the available energy spectrum</strong>!</p>
+<p>If we sampling the energy between a suitable interval, e.g in the picture from $E=3​$ to $E=5​$, WL guarantee that after enough searching, we can visit all the state in the set $3&lt;E&lt;5​$. Since the red points are also in the $3&lt;E&lt;5​$ we can safely say that we find the global min.</p>
+<p>Here is the histogram for state density.</p>
+<p><img src="http://7xseg9.com1.z0.glb.clouddn.com/image8.JPG" alt="image8"></p>
+<h4 id="That-is-why-we-believe-the-WL-sampling-can-help-us-to-solve-global-optimization-problem"><a href="#That-is-why-we-believe-the-WL-sampling-can-help-us-to-solve-global-optimization-problem" class="headerlink" title="That is why we believe the WL sampling can help us to solve global optimization problem."></a>That is why we believe the WL sampling can help us to solve global optimization problem.</h4>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://veya-ztn.xyz/2017/01/04/Cluster-Problem/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Veya">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Veya's">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Veya's" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/04/Cluster-Problem/" itemprop="url">
+                  Cluster Problem
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-04T11:15:59-08:00">
+                2017-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>The Cluster Problem is a basic physics optimization problem, which only involved:</p>
+<ul>
+<li>Numbers of particles</li>
+<li>Interaction according coordinate, spin or other intrinsic properties</li>
+</ul>
+<p>Ana the directly question for this problem is to find out the min energy structure (site distribution, spin mode, etc.)</p>
+<p>Here is a typical Leonard-Jones Cluster problem<br>$$<br>find {(X1,X2,\dots,X3)|\min \sum_{ij}(\frac{1}{r_{ij}^{12}}-\frac{2}{r_{ij}^6}),r_{ij}=|X_i-X_j|}<br>$$<br>
+          <!--noindex-->
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/01/04/Cluster-Problem/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://veya-ztn.xyz/2017/01/04/Diffraction Imaging/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Veya">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Veya's">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Veya's" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/04/Diffraction Imaging/" itemprop="url">
+                  Untitled
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-04T00:44:18-08:00">
+                2017-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h2 id="title：Diffraction-Imaging"><a href="#title：Diffraction-Imaging" class="headerlink" title="title：Diffraction Imaging"></a>title：Diffraction Imaging</h2><p>We all know that light has two character: wave and particle. The principle phenomenon for wave is the diffraction. How about using light to imaging a specific pattern?</p>
+<p>— Well, we know that if we want to use sunlight to imaging pictures, just shadow specific part of the light beam.</p>
+<p><img src="http://p1.bpimg.com/567571/52317d7f933dea62.jpg" alt=""><br>However, for diffraction, the light can not be block by a simple barrier : light will pass a  object which is as small as its wavelength. So, how to using diffraction to imaging is an unimaginable problem.</p>
+<p><img src="http://p1.bpimg.com/567571/8336fd97f38f94e4.jpg" alt=""><br>Thanks to the growing science and technology, we can compute this case and reappear a diffraction imaging in lab.</p>
+<p>What we need is just </p>
+<ol>
+<li>a lase beam</li>
+<li>LC optical shutter</li>
+</ol>
+<h2 id="Physics-Image"><a href="#Physics-Image" class="headerlink" title="Physics Image"></a>Physics Image</h2><p>We can easily image light beam consists of a great number of light line. It is fine in this situation and will not lose much physics nature. </p>
+<p>Firstly, diffraction required that every light line will split into hundreds sub-line after a small hole or barrier. </p>
+<p><img src="http://p1.bpimg.com/567571/4123fdffb638aa2a.jpg" alt=""><br>These amount lines are objected a very complex physics rule, but  approximately, we can  regard this rule as<br>$$<br>f(x-x_o,y-y_0,z,a)=\frac{4 a^2}{z}e^{\frac{i \pi}{z} ((x-x_0)^2+(y-y_0)^2)}sinc(\frac{2\pi a}{z}(x-x_0))sinc(\frac{2\pi a}{z}(y-y_0))<br>$$<br>where value $f$ is the wave function in space. And $|f|^2$ is just the intensity of this point.</p>
+<p>where the $sinc$ function is defined by $y=\frac{sin(\pi x)}{(\pi x)}$ </p>
+<p>if you want to know how this function comes, please read <a href="https://en.wikipedia.org/wiki/Fraunhofer_diffraction" target="_blank" rel="external"><em>Fraunhofer diffraction</em></a></p>
+<p>and <em>Collins formula</em> in Matrix Optical.</p>
+<p>The above formula suggests the distribution of diffracted plan wave light. And it is actually a 3D image</p>
+<p><img src="http://p1.bpimg.com/567571/3e1cc01f3a3c8999.jpg" alt=""></p>
+<p>So, if we want to know the wave function on the output surface, we need realize that it is the sum of all the light from input surface.</p>
+<p><img src="http://p1.bpimg.com/567571/db90e31117bfb5fe.jpg" alt=""></p>
+<p>Now, we can easily write the output wave function.<br>$$<br>Output=\int_{x_0} \int_{y_0} f(x-x_0,y-y_0)\times E(x_0,y_0) dx_0dy_0<br>$$<br>Here, $E(x_0,y_0)$ is the original wave function at input surface $(x_0,y_0)$.</p>
+<p>we can immediately realize this formula is actually a <strong>convolution</strong>. And now we can using  Fourier Transform to simple the integral<br>$$<br>\mathfrak{F}(Output)=\mathfrak{F}(field)\mathfrak{F}(E)<br>$$<br>this is also one idea to simplify computation.</p>
+<p>Back to our purpose: we want to use diffraction to imaging what we want to get. </p>
+<p>For example, we want to get a picture like a <strong>rabbit</strong>. </p>
+<p><img src="http://p1.bpimg.com/567571/25e76b26081f44b6.png" alt=""><br>And due to the limitation about eyes and information. We suppose that our human can only distinguish the light one and dark one, i.e. we can only receive intensity information ( this is totally wrong, because our eyes can actually analyze phase information which is helpful for our 3D feeling)</p>
+<p>so, what we really care about is not the wave function $Output$, otherwise, the intensity of output $|Output|^2$. </p>
+<p>As we discuss above, for diffraction, we can not get the inverse picture that when light pass through it, it will form a <strong>rabbit</strong>. What we can only do is to find a <strong>gesture</strong> to make our final picture get similar to <strong>rabbit</strong>.</p>
+<p>Let me summarize. For a ordinary light imaging problem, we can easily get a <strong>gesture</strong>, put it under the sunlight, we can receive a <strong>wolf</strong>, but for a diffraction problem, we can not get that according <strong>gesture</strong>, we can not get a <strong>wolf</strong>, but the similar thing as it, maybe a <strong>dog</strong>.</p>
+<p><img src="http://p1.bpimg.com/567571/52317d7f933dea62.jpg" alt=""></p>
+<h2 id="Math-Nature"><a href="#Math-Nature" class="headerlink" title="Math Nature"></a>Math Nature</h2><p>Actually, if we abstract the main principle of physics image, we can get a very simple math question. </p>
+<p>How to minimalize the difference between what we compute and what we want:<br>$$<br>\min ||F(input)-taget||<br>$$<br>where the $||.||$ is the  <a href="http://mathworld.wolfram.com/FrobeniusNorm.html" target="_blank" rel="external">Weighted Frobenius Norm</a></p>
+<ul>
+<li><p>the $input$ is our <strong>gesture</strong>, it is a matrix</p>
+</li>
+<li><p>the $target$ is our <strong>wolf</strong>, it is a matrix</p>
+<hr>
+</li>
+</ul>
+<ul>
+<li><p>Because it is a <strong>gesture</strong>, we can only control the shadow and pass. (Actually, if we have a good device, we can also control the phase and intensity, then there is not the same problem )</p>
+</li>
+<li><p>Because it is a <strong>wolf</strong>,  so we only compute the intensity</p>
+<hr>
+</li>
+</ul>
+<ul>
+<li>so the $input$ is a matrix contain only $0$ and $1$ which mean close and open respectly.</li>
+<li>so the $target$ is a matrix contain only non-negative element due to it is square module.</li>
+</ul>
+<p>#Method</p>
+<p>If the <strong>gesture</strong>  contain can be any matrix, this problem is a typical multi-variable optimization problem. Using LBFGS is a good choose. However, now, the $input$ matrix is only the open-close matrix which map to a discrete optimization problem. </p>
+<p>In my opinion, to solve this problem, using Monte Carlo simulation is a good way. Adding anneal element, this is a good way.</p>
+<h3 id="coding"><a href="#coding" class="headerlink" title="coding"></a>coding</h3><p>Since all we need to compute is matrix calculation. <strong>Matlab</strong> is a perfect platform.</p>
+<p>I will update my code and software on GitHub, I don’t want to discuss the detail about coding.</p>
+<p>I just write a GUI interface, it is a good way to show result together.</p>
+<p><img src="http://p1.bpimg.com/567571/ff02d96eafafdf51.jpg" alt=""></p>
+<p>The top left corner is the AIM target. The top right corner is the computing image (what we will see in real). And the bottom is the <strong>gesture</strong>.</p>
+<p>This is not a big deal, so let us do the experiment and play with fun~~!</p>
+<h2 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h2><p>I say, this experiment is very easily to do. What we only need is the laser beam and LC optical shutter.</p>
+<p><img src="http://p1.bpimg.com/567571/32dbc700de3910f9.jpg" alt=""></p>
+<p>And the real picture is like this </p>
+<p><img src="http://p1.bpimg.com/567571/d9303bc210953923.jpg" alt=""></p>
+<p>we can easily get the result. For example,</p>
+<p><img src="http://p1.bpimg.com/567571/c87538cdad2cb73e.jpg" alt=""></p>
+<p><img src="http://p1.bpimg.com/567571/d586fa17aa9ed3d9.jpg" alt=""></p>
+<p><img src="http://p1.bpimg.com/567571/09b28249d6a7ce85.jpg" alt=""></p>
+<h2 id="Computing-Result"><a href="#Computing-Result" class="headerlink" title="Computing Result"></a>Computing Result</h2><p>When playing, we can find some interested pheromones like</p>
+<p>usually, the $input$ is generally like $target$</p>
+<p><img src="http://i1.piimg.com/567571/9d8a37b9b5f9ffae.png" alt=""><img src="http://i1.piimg.com/567571/6868b2192527dc8c.png" alt=""><img src="http://i1.piimg.com/567571/ccf45e17738af925.png" alt=""></p>
+<p>but we can still get a totally different image, like </p>
+<p> <img src="http://i1.piimg.com/567571/f108d0791ccbd347.png" alt=""><img src="http://i1.piimg.com/567571/f2769db75c4679a8.png" alt=""><img src="http://i1.piimg.com/567571/e55782b492da0efe.png" alt=""></p>
+<h2 id="Further-Discuss"><a href="#Further-Discuss" class="headerlink" title="Further Discuss"></a>Further Discuss</h2><h3 id="Fourier-Lens"><a href="#Fourier-Lens" class="headerlink" title="Fourier Lens"></a>Fourier Lens</h3><p>Actually, we can apply a Fourier film and Fourier inverse film at front and behind of LC, and them we can get a very clear image.</p>
+<p>### </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://veya-ztn.xyz/2017/01/03/BFGSB & LBFGSB/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -838,7 +1327,7 @@ height="200"></iframe><br></div>
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
