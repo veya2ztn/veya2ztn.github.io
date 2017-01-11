@@ -97,7 +97,7 @@
 <meta property="og:image" content="http://7xseg9.com1.z0.glb.clouddn.com/image5.jpg">
 <meta property="og:image" content="http://7xseg9.com1.z0.glb.clouddn.com/image7.jpg">
 <meta property="og:image" content="http://7xseg9.com1.z0.glb.clouddn.com/image8.JPG">
-<meta property="og:updated_time" content="2017-01-11T00:23:58.622Z">
+<meta property="og:updated_time" content="2017-01-11T00:28:32.745Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Wang-Landau Sampling">
 <meta name="twitter:description" content="Wikipedia: Wang and Landau algorithm
@@ -333,13 +333,13 @@
 <h3 id="Ordinary-Monte-Carlo-Sampling"><a href="#Ordinary-Monte-Carlo-Sampling" class="headerlink" title="Ordinary Monte-Carlo Sampling"></a>Ordinary Monte-Carlo Sampling</h3><p>Before we talk about the nature of Wang-Landau Sampling, it is necessary to discuss the normal processing our physicists using to calculate the mean value (or observation value) —— <a href="https://en.wikipedia.org/wiki/Monte_Carlo_method_in_statistical_physics" target="_blank" rel="external">Monte-Carlo Sampling</a></p>
 <p>For this purpose, the Monte-Carlo is only use for sampling a probability distribution, like:</p>
 <p>if we want to calculate the average of physics quantity $A$</p>
-<p>$$<br>\left<a\right>=\int A(\vec{r})\frac{e^{-\beta E(\vec{r})}}{Z}d\vec{r}<br>$$</a\right></p>
+<p>$$<br>\bar{A}=\int A(\vec{r})\frac{e^{-\beta E(\vec{r})}}{Z}d\vec{r}<br>$$</p>
 <p>where $Z$ is the partition function</p>
 <p>$$<br>Z= \int e^{-\beta E_{\vec{r}}}d\vec{r}<br>$$</p>
 <p>we can regard $\frac{e^{-\beta E(\vec{r})}}{Z}$ as a term for probability $\rho(\vec{r})$ so that </p>
-<p>$$<br>\left<a\right>=\int A(\vec{r})\rho(\vec{r})d\vec{r}<br>$$</a\right></p>
-<p>So that if the variable $A$ happened as $\rho$, we can get $\left<a\right>$ directly.</a\right></p>
-<h4 id="computing-drawback"><a href="#computing-drawback" class="headerlink" title="computing drawback"></a>computing drawback</h4><p>It is obvious that we can compute one $\left<a\right>$ every time we set a $\beta=\frac{1}{k_bT}$.</a\right></p>
+<p>$$<br>\bar{A}=\int A(\vec{r})\rho(\vec{r})d\vec{r}<br>$$</p>
+<p>So that if the variable $A​$ happened as $\rho​$, we can get $\left<a\right>​$ directly.</a\right></p>
+<h4 id="computing-drawback"><a href="#computing-drawback" class="headerlink" title="computing drawback"></a>computing drawback</h4><p>It is obvious that we can compute one $\bar{A}$ every time we set a $\beta=\frac{1}{k_bT}$.</p>
 <h3 id="WL-Sampling"><a href="#WL-Sampling" class="headerlink" title="WL Sampling"></a>WL Sampling</h3><p>We can use another formula to calculate average</p>
 <p>$$<br>\left<a\right>=\int A(E)g(E)e^{-\beta E}dE<br>$$</a\right></p>
 <p>notice that $A(\vec{r})$ now become function of energy $E$.</p>
