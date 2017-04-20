@@ -1,0 +1,749 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, Veya" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="In this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n\rightarrow R $ is">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BFGSB & LBFGSB">
+<meta property="og:url" content="http://veya-ztn.xyz/2017/02/07/BFGSB & LBFGSB/index.html">
+<meta property="og:site_name" content="Veya's">
+<meta property="og:description" content="In this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n\rightarrow R $ is">
+<meta property="og:updated_time" content="2017-01-04T21:52:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BFGSB & LBFGSB">
+<meta name="twitter:description" content="In this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n\rightarrow R $ is">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://veya-ztn.xyz/2017/02/07/BFGSB & LBFGSB/"/>
+
+
+
+
+
+  <title> BFGSB & LBFGSB | Veya's </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Veya's</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle"></p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://veya-ztn.xyz/2017/02/07/BFGSB & LBFGSB/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Veya">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Veya's">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Veya's" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                BFGSB & LBFGSB
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-07T09:37:23+08:00">
+                2017-02-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>In this page, I want to talk about the recent study I learned from “minimalize problem”. That is how to find the vector $X$ to minimalize the vector function $f(X)$. The map $f : R^n\rightarrow R $ is arbitrary, so we make deal that we will not use the specific character of problem like symmetry, periodicity or other things. </p>
+<p>This method is firstly used for my study to find the minima energy structure of cluster. However, since it is a general method for numerical mathematic model, it flames at many fields. For example, machine learning. </p>
+<p>We will start from a simple introduce about Broyden–Fletcher–Goldfarb–Shanno algorithm (BFGS) and then to talk about how to create a modified algorithm for boundary problem.</p>
+<a id="more"></a>
+<h2 id="Newton’s-method"><a href="#Newton’s-method" class="headerlink" title="Newton’s method"></a>Newton’s method</h2><p>In numerical optimization, the Broyden–Fletcher–Goldfarb–Shanno (BFGS) algorithm is an iterative method for solving <strong>unconstrained</strong> nonlinear optimization problems.</p>
+<p>The BFGS method is an approximates Newton’s method. We know there are many way to find the solution of optimization problem like Gradient descent, Coordinate descent and, of course, Newton method and Quasi-Newton Methods. </p>
+<ol>
+<li>Gradient descent: based on the target function’s gradient with a linear convergence speed. When face the big problem, it is too slow to get result.</li>
+<li>Coordinate descent: After principle component analysis, this method still cannot be as fast as we hope.</li>
+<li>Newton method: based on the Hessian matrix which is the second gradient of target function. We are pleasure for its quadric convergence speed. However, for every question we need to store and compute the matrix calculation which require a big store space and calculation amount. Sometime, the iterative point will drive to wrong direction due to the non-positive Hessian matrix we computed. This is why we call Newton has bad robustness.</li>
+<li>Quasi-Newton Methods: we just want to use the approximate inverse matrix to replace Hessian matrix. Although the convergence speed is not as good as Newton method, the New Method can always guarantee the positive. And of course, this way can avoid calculate inverse of one matrix.</li>
+</ol>
+<p>The BFGS method is one of the Case 4. And the L-BFGS is cited as a numerical way to decrease store cost and calculation cost.</p>
+<p>I won’t introduce the prove for beingness and convergence, they all stay in textbook. I will recommend follow one: <em>Iterative Methods for Optimization, C.T.Kelley</em> but there must be suitable book for yourself. Otherwise, I will talk about main idea for method.</p>
+<h3 id="Main-idea"><a href="#Main-idea" class="headerlink" title="Main idea"></a>Main idea</h3><p>for question<br>$$<br>find \quad X={(x_1,x_2\dots x_n)|\min f(x_1,x_2\dots x_n)}<br>$$<br>we want to find a sequence $X_1, X_2, \dots$ satisfied that<br>$$<br>f(X_{n+1})&gt;f(X_n)<br>$$</p>
+<p>$$<br>X_{n+1} = Somemethod(X_n)<br>$$</p>
+<p>the main idea is to consider a very close place from $X_n$ . We can regard the complex function $f: R^n \rightarrow R$ as a simple quadratic function<br>$$<br>f(X_n+\Delta ) \approx f(X_n)+ \Delta^{T} g_n+\frac{1}{2}\Delta^{T} H_n \Delta<br>$$<br>where $g_n = \nabla f(X_n) $ is the first gradient and $H_n= \nabla^2 f(X_n)$ is the Hessian Matrix.</p>
+<p>we want to make $f(X_n+\Delta)$ min. Just use<br>$$<br>\frac{\partial f(X_n+\Delta)}{\partial \Delta}=g_n+H_n \Delta=0<br>$$<br>so that we can easily get $\Delta = - H_n^{-1}g_n$</p>
+<p>at most time, we use $-H_n^{-1}g_n$ as the main search direction to find the best $\alpha$ to minimalize function<br>$$<br>f(X_n-\alpha H_n^{-1}g_n)<br>$$<br>In order to find $\alpha$ we need to use line search method. This is easy to create one dimension search problem, but if there is boundary somewhere and with complex $f$, it is still need a huge intelligence.  I will recommend to read this paper : <em>Line Search Algorithms with Guaranteed Sufficient Decrease</em>. For principle problem, consider follow: (if one step is $-H_n^{-1}g_n$)</p>
+<ol>
+<li>How big the step is? So that we can get a local min?</li>
+<li>How small the step is? So that we will not jump too far to find the best near point?</li>
+</ol>
+<h3 id="BFGS"><a href="#BFGS" class="headerlink" title="BFGS"></a>BFGS</h3><p>The main processing of Quasi-Newton is followed<br>$$<br>\begin{align}<br>&amp; \mbox{For $n=0,1,\ldots$ (until converged)}: \\<br>&amp; \hspace{1em} \mbox{// Compute search direction and step-size } \\<br>&amp; \hspace{1em} d = H^{-1}_n g_n \\<br>&amp; \hspace{1em} \alpha \leftarrow \min_{\alpha \geq 0} f(X_{n} - \alpha d) \\<br>&amp; \hspace{1em} X_{n+1} = x_{n} - \alpha d \\<br>&amp; \hspace{1em} \mbox{// Compute the difference and gradient } \\<br>&amp; \hspace{1em} g_{n+1} \leftarrow \nabla f(X_{n+1}) \\<br>&amp; \hspace{1em} s_{n+1} = X_{n+1} - X_n \\<br>&amp; \hspace{1em} y_{n+1} =g_{n+1} -g_n \\<br>&amp; \hspace{1em} \mbox{// Update inverse hessian } \\<br>&amp; \hspace{1em} H^{-1}_{n+1} \leftarrow \mbox{Update}(H^{-1}_{n},s_{n+1}, y_{n+1})<br>\end{align}<br>$$<br>And the most important problem is what is Function $Update$ </p>
+<p>if $Update$ equal to $\nabla^2f(X_{n+1})$, then it just is the Newton method.</p>
+<p>we can use the mean value theorem and the Hessian is symmetric matrix.<br>$$<br>(g_n-g_{n-1})=H_n(X_n-X_{n-1})<br>$$<br>and we want to get such $H_n$ that it is not so different from $H_{n-1}$<br>$$<br>\begin{aligned}<br>\min &amp; \hspace{0.5em} | H^{-1} - H^{-1}_{n-1} |^2 \\<br>\mbox{s.t. } &amp; \hspace{0.5em} H^{-1} \mathbf{y}_{n}   = \mathbf{s}_{n} \\<br>            &amp; \hspace{0.5em}H^{-1} \mbox{ is symmetric }<br>\end{aligned}<br>$$<br>we use the <a href="http://mathworld.wolfram.com/FrobeniusNorm.html" target="_blank" rel="external">Weighted Frobenius Norm</a></p>
+<p>The solution is<br>$$<br>H^{-1}_{n+1} =V_n H^{-1}_n V_n^T + \rho_n s_n s_n^T<br>$$</p>
+<p>$$<br>V_n=I - \rho_n y_n s_n^T<br>$$</p>
+<p>$$<br>\rho_n = (y_n^T s_n)^{-1}<br>$$</p>
+<p>This way for updating is Broyden–Fletcher–Goldfarb–Shanno (BFGS) Updating.</p>
+<p>And for L-BFGS, the principle difference is how to create $H_{n+1}^{-1}$. We use $m$ stored vector ${s_n}$ and m stored vector ${y_n}$ to create the $H_n^{-1}$<br>$$<br>\begin{align}<br>&amp; H_n^{-1}=(A_n^T)H_n^0A_n+\sum_{i=1}^{m}\rho_{k-i}A_i^Ts_is_i^TA_i\\<br>&amp; A_i=V_{k-i+1}\dots V_{k-1}\\<br>&amp; V_k=I-\rho_k y_k s_k^T\\<br>&amp; \rho_k= (y_k^T s_k)^{-1}<br>\end{align}<br>$$<br>For more detail introduction about BFGS and LBFGS, the <a href="http://aria42.com/blog/2014/12/understanding-lbfgs" target="_blank" rel="external"><em>aria42</em>‘s blog</a> is very complicate!</p>
+<h2 id="BFGS-B-amp-L-BFGS-B"><a href="#BFGS-B-amp-L-BFGS-B" class="headerlink" title="BFGS-B &amp; L-BFGS-B"></a>BFGS-B &amp; L-BFGS-B</h2><p>The BFGS-B problem is considering about the question that<br>$$<br>find \quad X={(x_1,x_2\dots x_n)|\min f(x_1,x_2\dots x_n),x_i \in F_i}<br>$$<br>where $F_i$ is a constraint.</p>
+<p>We first talk about the simplest constraint case, that is $F_i=[a_i,b_i]$</p>
+<p>it is easily to think about the parameter $x_1,x_2\dots x_n$are restrained into a hype-box.<br>$$<br>find \quad X={(x_1,x_2\dots x_n)|\min f(x_1,x_2\dots x_n),a_i&lt;x_i&lt;b_i}<br>$$</p>
+<h3 id="The-outline-of-algorithm"><a href="#The-outline-of-algorithm" class="headerlink" title="The outline of algorithm"></a>The outline of algorithm</h3><p>$$<br>\begin{align}<br>&amp; \mbox{Until convergence $ ||P(X_k-g_k,l,u)-X_k||&lt;10^{-5})$} \\<br>&amp; \hspace{1em} \mbox{ Compute the Cauchy point $X_c$}\\<br>&amp; \hspace{1em} \mbox{ Compute the search direction $d_k$}\\<br>&amp; \hspace{1em} \mbox{ Perform a line search along  $d_k$ subject to bounds }\\<br>&amp; \hspace{1em} \mbox{ Compute the new point $x_{k+1}$and new gradience $g_{k+1}$}\\<br>&amp; \hspace{1em} \mbox{ update store information${S_k}$and ${Y_k}$}\\<br>&amp; \hspace{1em} k=k+1<br>\end{align}<br>$$</p>
+<p>Function $P$ is a project operator which make $x_i&gt;u_i\rightarrow x_i=u_i$ and $x_i&lt;l_i\rightarrow x_i=l_i$</p>
+<p>first consider a moving point in the hype dimension space under the rule we apply before (like BFGS) without the boundary limit. Now if we apply a wall in the space, the point maybe crash to the bound, right? After crashing, how will it to move in order to a lower energy place? Bounce or just follow the wall to move. If not bounce, how to determine its route? </p>
+<p>What will happened if you pull a tool car on a slope？– it will follow the project direction! So, that is the first step we apply to a boundary multivariate optimization! After simple moving, the point maybe float in the box, or just adjoin in a box surface, then we consider the feasible para which one is not on the boundary. That is what we do. I will still not talk about convergence. More detail prove cited at </p>
+<ol>
+<li><em>A LIMITED MEMORY ALGORITHM FOR BOUND CONSTRAINED OPTIMIZATION</em></li>
+<li><em>Modiﬁed subspace limited memory BFGS algorithm for large-scale bound constrained optimizationI</em> </li>
+<li><em>An active set limited memory BFGS algorithm for large-scale bound constrained optimization</em></li>
+</ol>
+<h3 id="A-and-I"><a href="#A-and-I" class="headerlink" title="$A$ and $I$"></a>$A$ and $I$</h3><h3 id="Cauchy-point"><a href="#Cauchy-point" class="headerlink" title="Cauchy point"></a>Cauchy point</h3><p>The Cauchy point can be recognized as what I said above. Of course, we can easily regard it as an modified term due to the additional bound condition. We just stop at every time the new coordinate active (touch the bound) and compute if there is a local min point.</p>
+<p>Every search stop point can be identified like</p>
+<p>$$<br>\begin{array}{rl}<br>&amp;t_i=(x_i^0-u_i)/g_i &amp; if \,  g_i  &gt;0 \\<br>&amp;t_i=(x_i^0-l_i)/g_i  &amp; if \,   g_i &lt;0 \\<br>&amp;t_i=\infty               &amp; if \,   g_i =0<br>\end{array}<br>$$</p>
+<p>$$<br>\begin{array}{rl}<br>&amp;d_i=0 &amp; if \,t_i=0\\<br>&amp;d_i=-g_i &amp; if \,otherwise\\<br>\end{array}<br>$$</p>
+<p>Sort ${t_i}$, begin from the smallest $t_i$ we can get interval $[t^1,t^2],[t^2,t^3]\dots$ where $t^1$ is the smallest $t_i$</p>
+<p>In every interval, we compute the min value and min point (now it is a 1D system) if the  min point locate in the interval, stop search and return point (Cauchy point), otherwise continue do processing.</p>
+<p>$$<br>\begin{align}<br>&amp; \mbox{For $i=1,2,\dots,n $ and $ X=(x_1,x_2,\dots,x_n)^T$}\\<br>&amp; p=W^Td\\<br>&amp; c=(0,0,\dots,0)^T\\<br>&amp; f’=-d^Td\\<br>&amp; f’’=-\theta f’-p^TMp\\<br>&amp; \Delta t_{min}=-\frac{f’}{f’}\\<br>&amp; t_{old}=0\\<br>&amp; \mbox{find the min $t_i&gt;0$, mark $t_b$,and make $t_b=0$}\\<br>&amp; \Delta t=t_b\\<br>&amp; \mbox{While  $\Delta t_{min}&gt;\Delta t $ do}\\<br>&amp; \mbox{$x_b^c=u_b$ if $d_b &lt; 0$}\\<br>&amp; \mbox{$x_b^c=l_b$  if $d_b &gt; 0$}\\<br>&amp; z_b=x_b^c-x_b,x_b=x_b^c\\<br>&amp; c=c+\Delta t p\\<br>&amp; f’=f’+\Delta f’’+g_b^2+\theta g_bz_b-g_b\omega_b^TMc\\<br>&amp; f’’=f’’-\theta g_b^2-2g_b\omega_b^T Mp-g_b^2\omega_b^TM\omega_b\\<br>&amp; p=p+g_b\omega_b\\<br>&amp; d_b=0\\<br>&amp; \Delta t_{min}=-\frac{f’}{f’}\\<br>&amp; t_{old}=t_b (last\, one)\\<br>&amp; \mbox{find the min $t_i&gt;0$, mark $t_b$,and make $t_b=0$}\\<br>&amp; \Delta t=t_b-t_{b,last}\\<br>&amp; \mbox{end while}\\<br>&amp; \Delta t_{min}=max{\Delta t_{min},0} \\<br>&amp; t_{old}=t_{old}+ \Delta t_{min}\\<br>&amp; X = X + t_{old} d\\<br>&amp;c=c+\Delta t_{min}p\\<br>\end{align}<br>$$</p>
+<p>in order to apply this processing, we need set the $\theta$ before, this is the value we use for LBFGS<br>$$<br>B_k=\theta I - W_kM_kW_k^T<br>$$</p>
+<p>$$<br>H_k^{-1}=\frac{I}{\theta}+\bar{W_k}\bar{M_k}\bar{W_k}^T<br>$$</p>
+<p>where $B_k$ is the approximate matrix for Hessian matrix. And the $H_k^{-1}$ is the inverse matrix.</p>
+<p>You will find the BFGS updating rule is quite different from above, this is the another representation. More details, followed</p>
+<p> <em>REPRESENTATIONSOFQUASINEWTONMATRICES AND THEIR USE IN LIMITED MEMORY METHODS</em><br>$$<br>W_k=[Y_k \quad \theta S_k] \quad \bar{W_k}=[\frac{Y_k}{\theta}\quad S_k]<br>$$</p>
+<p>$$<br>D_k=diag[s_{k-m}^Ty_{k-m},\dots,s_{k-1}^Ty_{k-1}]<br>$$</p>
+<p>$$<br>\begin{array} {rl}&amp;(L_k)_{ij}=s_{k-m-1+i}^T y_{k-m-1+i}&amp; if \, i&gt;j\\<br>&amp;(L_k)_{ij}=0&amp;otherwise\\\end{array}<br>$$</p>
+<p>$$<br>\begin{array}{rl}&amp; (R_k)_{ij}=s_{k-m-1+i}^T y_{k-m-1+i}&amp; if \, i \le j\\<br>&amp;(R_k)_{ij}=0&amp;  otherwise\end{array}<br>$$</p>
+<p>$$<br>M_k=\left[\begin{aligned}<br>&amp;-D_k&amp;L_k^T\\<br>&amp;L_k&amp;\theta S_k^TS_k\\<br>\end{aligned}\right ]^{-1}<br>$$</p>
+<p>$$<br>\bar{M_k}=\left[\begin{aligned}<br>&amp;0&amp;-R_k^{-1}\\<br>&amp;-R_k^{-T}&amp;R_k^{-T}(D_k+Y_k^TY_k/\theta)R_k^{-1}\\<br>\end{aligned}\right ]<br>$$</p>
+<h3 id="Direction"><a href="#Direction" class="headerlink" title="Direction"></a>Direction</h3><p>we after using the Cauchy point as our start point to apply a Quasi-Newton method in the non-active para subspace. The first thing is to determine a direction. </p>
+<p>before we do that, we need to introduce how to limit our problem into a subspace:</p>
+<p>using the project matrix $A_k$, otherwise the norm project operator. In this algorithm, $A_k$ is a $n \times t_a$ matrix. $t_a$ is the number of active bound (the component of $x_c$ at the bound) for example is $n=3$ and the active site is $2$ (3D point now lies on a surface and move) the matrix is<br>$$<br>A_k=\left[\begin{aligned}<br>0\\<br>1\\<br>0\\<br>\end{aligned}\right ]<br>$$<br>that is choose the active components’ unit vector.<br>$$<br>\begin{align}<br>&amp; \mbox{If $t_a=0 \rightarrow d=-H_k^{-1}h_k$}\\<br>&amp;\mbox{If $t_a&gt;0 \rightarrow$}\\<br>&amp;u=-A_k^TH_k^{-1}g_k-b\\<br>&amp;\lambda=-(A_k^TH_k^{-1}A_k)^{-1}u\\<br>&amp;d=-H_k^{-1}(A_k\lambda+g_k)\\<br>&amp;\mbox{backtrack $\rightarrow$}\\<br>&amp;\alpha^<em>=max{\alpha:l&lt;x_c+\alpha(x_k+d-x_c)&lt;u_i}\\<br>&amp;x_{next}=x_c+\alpha^</em>(x_k+d-x_c)<br>\end{align}<br>$$<br>I recommend use the matrix calculation directly, because the rank of this matrix is $m$</p>
+<p>which is set by ourselves and always smaller than 10. So using the existing package can quick compute. </p>
+<h2 id="If-no-L"><a href="#If-no-L" class="headerlink" title="If no L?"></a>If no L?</h2><p>what I talk about is only the simple bound for LBFGS problem. As far as I know, the LBFGS seems to be created for box problem firstly? Maybe wrong~~</p>
+<p>Anyway, what about a normal BFGS? If you want to know more detail, please check the book <em>Iterative Methods for Optimization</em> Capt. 5.</p>
+<p>In a word, the update rule change</p>
+<p>$$<br>H^{-1}_{n+1} =\bar{V_n} P_{I}H^{-1}_nP_{I} \bar{V_n^T} + \bar{\rho_n} \bar{s_n} \bar{s_n}^T<br>$$</p>
+<p>$$<br>\bar{V_n}=I - \bar{\rho_n} \bar{y_n}\bar{s_n}^T<br>$$</p>
+<p>$$<br>\bar{\rho_n} = (\bar{y_n}^T \bar{s_n})^{-1}<br>$$</p>
+<p>$$<br>\bar{y_n}=P_I y_n \quad \bar{s_n}=P_I s_n<br>$$</p>
+<p>where $P_I$ is the $n\times n$ project matrix.</p>
+<h1 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h1><p>Thanks to <a href="http://arma.sourceforge.net/" target="_blank" rel="external">armadillo</a> I can use a very brief code and powerful linear algebra at C++; </p>
+<p>I will update my code to my <a href="">GitHub</a>.</p>
+<p>Here is the main code. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">vec BFGS(vec x)</div><div class="line">&#123;</div><div class="line">	//m is the store vector number;</div><div class="line">	//n is the para number </div><div class="line">	//x is the start point ;</div><div class="line">	</div><div class="line">	int n = x.n_elem;</div><div class="line">	</div><div class="line">	mat B(n, n, fill::eye);</div><div class="line">	mat I(n, n, fill::eye);</div><div class="line">	vec x_next = zeros&lt;vec&gt;(n), x_last = zeros&lt;vec&gt;(n), g_next = zeros&lt;vec&gt;(n), g_last = zeros&lt;vec&gt;(n), d;</div><div class="line">	vec sk, yk;</div><div class="line">	</div><div class="line">	double epsilon = pow(10, -6);</div><div class="line">	double un = 0.0001, mu = 0.9, amax;</div><div class="line">	</div><div class="line">	mat y(3, 1), s(3, 1);</div><div class="line">	</div><div class="line">	x_next = x;</div><div class="line">	g_next = Diff(x_next);</div><div class="line">	</div><div class="line">	while (norm(g_next) &gt; epsilon)</div><div class="line">	&#123;</div><div class="line">		sk = x_next - x_last;</div><div class="line">		yk = g_next - g_last;</div><div class="line">		y = yk; s = sk;</div><div class="line">		B = B + kron(y, y.t()) / dot(y, s) - B*kron(s, s.t())*B / dot(s, B*s);</div><div class="line">		d = -inv(B)*g_next;</div><div class="line">		//---no inverse version------------------------------</div><div class="line">		//B = (I - kron(s, y.t()) / dot(y, s))*B*(I - kron(y, s.t()) / dot(y, s)) + kron(s, s.t()) / dot(y, s);</div><div class="line">		//d = -B*g_next;</div><div class="line">		//---------------------------------------------------</div><div class="line">		x_last = x_next;</div><div class="line">		g_last = g_next;</div><div class="line">		amax = (0.01 / abs(dphi(x_last, d, 0))) / un;//0.01 is the precesion.</div><div class="line">		x_next = Linesearch(x_last, d, un, mu, amax);</div><div class="line">		g_next = Diff(x_next);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	return x_next;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">vec BFGSB(vec x, vec l, vec u)</div><div class="line">&#123;</div><div class="line">	//m is the store vector number;</div><div class="line">	//n is the para number </div><div class="line">	//x is the start point ;</div><div class="line">	</div><div class="line">	int n = x.n_elem;</div><div class="line">	</div><div class="line">	mat B,A,In;</div><div class="line">	vec x_next = zeros&lt;vec&gt;(n), x_last = zeros&lt;vec&gt;(n), g_next = zeros&lt;vec&gt;(n), g_last = zeros&lt;vec&gt;(n), d;</div><div class="line">	vec sk, yk;</div><div class="line">	mat I(n, n, fill::eye);</div><div class="line">	double epsilon = pow(10, -6);</div><div class="line">	double un = 0.0001, mu = 0.9, amax,rho;</div><div class="line">	</div><div class="line">	mat y(3, 1), s(3, 1);</div><div class="line">	</div><div class="line">	x_next = x;</div><div class="line">	g_next = Diff(x_next);</div><div class="line">	A = Activeset(x_next, u, l);</div><div class="line">	In = Inactive(x_next, u, l);</div><div class="line">	B = In;</div><div class="line">	</div><div class="line">	while (norm(g_next) &gt; epsilon)</div><div class="line">	&#123;</div><div class="line">		A = Activeset(x_next, u, l);</div><div class="line">		In = Inactive(x_next, u, l);</div><div class="line">		sk = x_next - x_last;</div><div class="line">		yk = g_next - g_last;</div><div class="line">		yk = In*yk;</div><div class="line">		rho = dot(sk, yk);</div><div class="line">		sk = In*sk;</div><div class="line">		y = yk; s = sk;</div><div class="line">		if (rho &gt; 0) &#123; B = B + (I - kron(s, y.t()) / dot(y, s))*In*B*In*(I - kron(y, s.t()) / dot(y, s)) + kron(s, s.t()) / dot(y, s); &#125;</div><div class="line">		else &#123; B = In; &#125;</div><div class="line">		d = -(A + B)*g_next;</div><div class="line">		amax = (0.01 / abs(dphi(x_next, d, 0))) / un;//0.01 is the precesion.</div><div class="line">		x_last = x_next;</div><div class="line">		g_last = g_next;</div><div class="line">		x_next = Linesearch(x_last, d, un, mu, amax);</div><div class="line">		g_next = Diff(x_next);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	return x_next;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">vec BFGSB_eps(vec x, vec l, vec u)</div><div class="line">&#123;</div><div class="line">	//m is the store vector number;</div><div class="line">	//n is the para number </div><div class="line">	//x is the start point ;</div><div class="line">	</div><div class="line">	int n = x.n_elem;</div><div class="line">	</div><div class="line">	mat B, A, In;</div><div class="line">	vec x_next = zeros&lt;vec&gt;(n), x_last = zeros&lt;vec&gt;(n), g_next = zeros&lt;vec&gt;(n), g_last = zeros&lt;vec&gt;(n), d;</div><div class="line">	vec sk, yk ;</div><div class="line">	mat I(n, n, fill::eye);</div><div class="line">	double epsilon = pow(10, -6);</div><div class="line">	double un = 0.0001, mu = 0.9, amax, rho, eps,pg;</div><div class="line">	</div><div class="line">	mat y(3, 1), s(3, 1);</div><div class="line">	</div><div class="line">	x_next = x;</div><div class="line">	g_next = Diff(x_next);</div><div class="line">	pg = norm(x - Proj(x_next - g_next,l,u));</div><div class="line">	eps = min((u - l) / 2)&lt; pg ? min((u - l) / 2): pg;</div><div class="line">	A = Activeset(x_next, u, l, eps);</div><div class="line">	In = Inactive(x_next, u, l, eps);</div><div class="line">	B = In;</div><div class="line">	</div><div class="line">	while (norm(g_next) &gt; epsilon)</div><div class="line">	&#123;	</div><div class="line">		A = Activeset(x_next, u, l, eps);</div><div class="line">		In = Inactive(x_next, u, l, eps);</div><div class="line">		sk = x_next - x_last;</div><div class="line">		yk = g_next - g_last;</div><div class="line">		yk = In*yk;</div><div class="line">		rho = dot(sk, yk);</div><div class="line">		sk = In*sk;</div><div class="line">		y = yk; s = sk;</div><div class="line">		if (rho &gt; 0) &#123; B = B + (I - kron(s, y.t()) / dot(y, s))*In*B*In*(I - kron(y, s.t()) / dot(y, s)) + kron(s, s.t()) / dot(y, s); &#125;</div><div class="line">		else &#123; B = In; &#125;</div><div class="line">		d = -(A + B)*g_next;</div><div class="line">		amax = (0.01 / abs(dphi(x_next, d, 0))) / un;//0.01 is the precesion.</div><div class="line">		x_last = x_next;</div><div class="line">		g_last = g_next;</div><div class="line">		x_next = Linesearch(x_last, d, un, mu, amax);</div><div class="line">		g_next = Diff(x_next);</div><div class="line">		pg = norm(x - Proj(x_next - g_next, l, u));</div><div class="line">		eps = min((u - l) / 2)&lt; pg ? min((u - l) / 2) : pg;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	return x_next;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="function">vec <span class="title">LBFGS</span><span class="params">(<span class="keyword">int</span> m, vec x)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="comment">//m is the store vector number;</span></div><div class="line">	<span class="comment">//n is the para number </span></div><div class="line">	<span class="comment">//x is the start point ;</span></div><div class="line">	</div><div class="line">	<span class="keyword">int</span> n = x.n_elem;</div><div class="line">	<span class="function">mat <span class="title">Y</span><span class="params">(n, <span class="number">1</span>)</span></span>;</div><div class="line">	<span class="function">mat <span class="title">S</span><span class="params">(n, <span class="number">1</span>)</span></span>;</div><div class="line">	</div><div class="line">	vec x_next, x_last, g_next, g_last, s_next, y_next, dir;</div><div class="line">	vec R;</div><div class="line">	</div><div class="line">	<span class="keyword">double</span> delta, epsilon, eps = <span class="built_in">pow</span>(<span class="number">10</span>, <span class="number">-16</span>);</div><div class="line">	<span class="keyword">double</span> un = <span class="number">0.0001</span>, mu = <span class="number">0.9</span>;</div><div class="line">	</div><div class="line">	x_last = x;</div><div class="line">	g_last = Diff(x_last);</div><div class="line">	Y = x_last;</div><div class="line">	S = g_last;</div><div class="line">	delta = <span class="number">1</span>;</div><div class="line">	<span class="keyword">double</span> amax;</div><div class="line">	<span class="keyword">while</span> (delta&gt;<span class="number">0.00001</span>)</div><div class="line">	&#123;</div><div class="line">		dir = twoloop(Y, S, g_last);</div><div class="line">		amax = (<span class="number">0.01</span>/<span class="built_in">abs</span>(dphi(x_last,dir,<span class="number">0</span>))) / un;<span class="comment">//0.01 is the precesion.</span></div><div class="line">		x_next = Linesearch(x_last, dir, un, mu, amax);</div><div class="line">		g_next = Diff(x_next);</div><div class="line">		s_next = x_next - x_last;</div><div class="line">		y_next = g_next - g_last;</div><div class="line">		epsilon = norm(y_next, <span class="string">"inf"</span>); epsilon = eps*epsilon*epsilon;</div><div class="line">		<span class="keyword">if</span> (dot(s_next, y_next) &gt; epsilon)</div><div class="line">		&#123;</div><div class="line">			S = join_rows(S, s_next);</div><div class="line">			Y = join_rows(Y, y_next);			</div><div class="line">			<span class="keyword">if</span> ((<span class="keyword">int</span>)S.n_cols &gt; m) &#123; S.shed_col(<span class="number">0</span>); Y.shed_col(<span class="number">0</span>); &#125;</div><div class="line">		&#125;</div><div class="line">	    delta = norm(x_next - x_last, <span class="string">"inf"</span>);</div><div class="line">		x_last = x_next;</div><div class="line">		g_last = g_next;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> x_last;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="function">vec <span class="title">LBFGSB</span><span class="params">(<span class="keyword">int</span> m, vec x, vec l, vec u)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="comment">//m is the store vector number;</span></div><div class="line">	<span class="comment">//n is the para number </span></div><div class="line">	<span class="comment">//x is the start point ;</span></div><div class="line">	<span class="comment">//u is the simple uppon boundary;</span></div><div class="line">	<span class="comment">//l is the simple lower boundary;</span></div><div class="line">	</div><div class="line">	<span class="keyword">int</span> n = x.n_elem;</div><div class="line">	<span class="function">mat <span class="title">Y</span><span class="params">(n, <span class="number">1</span>)</span></span>;</div><div class="line">	<span class="function">mat <span class="title">S</span><span class="params">(n, <span class="number">1</span>)</span></span>;</div><div class="line">	</div><div class="line">	vec x_next, x_last, g_next, g_last, s_next, y_next, dir;</div><div class="line">	<span class="keyword">double</span> theta, delta, epsilon, eps = <span class="built_in">pow</span>(<span class="number">10</span>, <span class="number">-16</span>);</div><div class="line">	<span class="keyword">double</span> un=<span class="number">0.0001</span>, mu=<span class="number">0.9</span>, amax;</div><div class="line">	</div><div class="line">	x_last = x;</div><div class="line">	g_last = Diff(x_next);</div><div class="line">	Y = x_last;</div><div class="line">	S = g_last;</div><div class="line">	delta = norm(Proj(x_last, l, u) - x_last, <span class="string">"inf"</span>);</div><div class="line">	theta = dot(g_last, g_last) / dot(x_last, g_last);</div><div class="line">	<span class="keyword">while</span> (delta&gt;<span class="number">0.00001</span>)</div><div class="line">	&#123;</div><div class="line">		dir = Cauchydual(Y, S, x_last, l, u, g_last, theta)-x_last;</div><div class="line">		amax = Amax(x_last, l, u, dir);</div><div class="line">		x_next = Linesearch(x_last,dir,un,mu,amax);</div><div class="line">		g_next = Diff(x_last);</div><div class="line">		s_next = x_next - x_last;</div><div class="line">		y_next = g_next - g_last;</div><div class="line">		epsilon = norm(y_next, <span class="string">"inf"</span>); epsilon = eps*epsilon*epsilon;</div><div class="line">		<span class="keyword">if</span> (dot(s_next, y_next) &gt; epsilon)</div><div class="line">		&#123;</div><div class="line">			S = join_rows(S, s_next);</div><div class="line">			Y = join_rows(Y, y_next);</div><div class="line">			<span class="keyword">if</span> ((<span class="keyword">int</span>)S.n_cols &gt; m) &#123; S.shed_col(<span class="number">0</span>); Y.shed_col(<span class="number">0</span>); &#125;</div><div class="line">		&#125;</div><div class="line">		theta = dot(y_next, y_next) / dot(s_next, y_next);</div><div class="line">		x_last = x_next;</div><div class="line">		g_last = g_next;</div><div class="line">		delta = norm(Proj(x_last, l, u) - x_last, <span class="string">"inf"</span>);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> x_last;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Postscript"><a href="#Postscript" class="headerlink" title="Postscript"></a>Postscript</h2><p>This is always not a final draft, and every time I recall something want to share, I will update it. </p>
+<p>This is now my own note, and I don’t prepare to publish it. However, I believe I will turn it to pubic finally.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/20/LJcluste/" rel="next" title="3D image of Bounded LJ-cluster">
+                <i class="fa fa-chevron-left"></i> 3D image of Bounded LJ-cluster
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/07/Cluster-Problem/" rel="prev" title="Cluster Problem">
+                Cluster Problem <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Veya" />
+          <p class="site-author-name" itemprop="name">Veya</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Newton’s-method"><span class="nav-number">1.</span> <span class="nav-text">Newton’s method</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Main-idea"><span class="nav-number">1.1.</span> <span class="nav-text">Main idea</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BFGS"><span class="nav-number">1.2.</span> <span class="nav-text">BFGS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BFGS-B-amp-L-BFGS-B"><span class="nav-number">2.</span> <span class="nav-text">BFGS-B & L-BFGS-B</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-outline-of-algorithm"><span class="nav-number">2.1.</span> <span class="nav-text">The outline of algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-and-I"><span class="nav-number">2.2.</span> <span class="nav-text">$A$ and $I$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cauchy-point"><span class="nav-number">2.3.</span> <span class="nav-text">Cauchy point</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Direction"><span class="nav-number">2.4.</span> <span class="nav-text">Direction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#If-no-L"><span class="nav-number">3.</span> <span class="nav-text">If no L?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Code"><span class="nav-number"></span> <span class="nav-text">Code</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Postscript"><span class="nav-number">1.</span> <span class="nav-text">Postscript</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Veya</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
