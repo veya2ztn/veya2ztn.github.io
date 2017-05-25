@@ -100,7 +100,7 @@
 半满的电子体系,化学势为0我们的目的是 探索巨正则系综配分函数的最优化问题$$Z=\operatorname{tr}\exp[-\beta H+uN]=\operatorname{tr}\exp[-\">
 <meta property="og:image" content="http://i4.buimg.com/588926/30bf60e77c2e95fc.png">
 <meta property="og:image" content="http://i4.buimg.com/588926/8fb4d5b64924ec7c.png">
-<meta property="og:updated_time" content="2017-05-25T15:33:13.467Z">
+<meta property="og:updated_time" content="2017-05-25T15:52:27.726Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Lieb Theorem">
 <meta name="twitter:description" content="Lieb Theorem下面要介绍Lieb定理，在介绍这个定理前，需要先了解：
@@ -383,13 +383,13 @@
 <p>我们可以将所有的左代数移到左边，所有的右代数移到右边使得最后的结果变成<br>$$<br>X=a_{l1}V_La_{l2}V_L\dots V_La_{lM}a_{r1}V_R\dots a_{rM}V_R=A_{L_1}A_{L_2}\dots A_{L_M}A_{R_1}\dots A_{R_M}<br>$$<br>移动$A_L$和$V_L$不用考虑符号问题，因为他们都是偶代数，但是移动$H_{int}$中的$c_l^+c_r$时，因为要越过$A_R$或者$V_L$, 有可能出现负号，</p>
 <p>但是我们可以证明只会出现两种情况：</p>
 <ul>
-<li>$\operatorname{tr} X=\sum<b_i|x|b_i>=0$</b_i|x|b_i></li>
+<li>$ \operatorname{tr} X=\sum \left\langle b_i\right|X \left| b_i \right\rangle=0 $</li>
 <li>会出现偶数个负号</li>
 </ul>
 <p>$$<br>\operatorname{tr}X=(\operatorname{tr}A_{L_1})(\operatorname{tr}A_{L_2})\dots (\operatorname{tr}A_{L_M})(\operatorname{tr}A_{R_1})\dots (\operatorname{tr}A_{R_M})<br>$$<br>很显然的, 算符$A=c_l^+ $的trace是$0$，而算符$A=c_l^+c_l$的trace不为$0$</p>
 <p>这个事实告诉我们，如果$\operatorname{tr}X\neq0$，则必然要求$c_l^+c_r$与$c_lc_r^+$同时出现</p>
 <p>选取一个某一个$\operatorname{tr}X\neq0$的$X$， 我们约定里面有$J$对$ c_l^+c_r$与$-c_lc_r^+$。 由于穿过$A_L\Theta(A_L)$不提供负号，如果只考虑符号问题，文明可以将些$J$对拼在一起<br>$$<br>(-c_{l_1}^+c_{r_1}c_{l_1}c_{r_1}^+)(-c_{l_2}^+c_{r_2}c_{l_2}c_{r_2}^+)\dots(-c_{l_J}^+c_{r_J}c_{l_J}c_{r_J}^+)<br>$$<br>利用$J$次交换配成偶次项<br>$$<br>(c_{l_1}^+c_{l_1}c_{r_1}c_{r_1}^+)(c_{l_2}^+c_{l_2}c_{r_2}c_{r_2}^+)\dots(c_{l_J}^+c_{l_J}c_{r_J}c_{r_J}^+)<br>$$<br>然后直接变换成如下形状,所有负号抵消<br>$$<br>(c_{l_1}^+c_{l_1}c_{l_2}^+c_{l_2}\dots c_{l_J}^+c_{l_J})(c_{r_1}c_{r_1}^+c_{r_2}c_{r_2}^+\dots c_{r_J}c_{r_J}^+)<br>$$<br>所以如果我们约定最后$X$依左右分开的形式表示$X=X_LX_R$，那么$X$的前面没有负号。</p>
-<p>现在我们来证明不等式<br>$$<br>\begin{aligned}<br>&amp;\operatorname{tr}X=\sum<b_{l_i},b_{r_i}|x_lx_r|b_{l_i},b_{r_i}>=\sum<b_{l_i}|x_l|b_{l_i}>\sum<b_{r_i}|x_r|b_{r_i}>\\<br>&amp;\operatorname{tr}X_L=\sum<b_{l_i},b_{r_i}|x_l|b_{l_i},b_{r_i}>=\sum_{N_R}\sum<b_{l_i}|x_l|b_{l_i}> \\<br>&amp;\operatorname{tr}X_R=\sum<b_{l_i},b_{r_i}|x_r|b_{l_i},b_{r_i}>=\sum_{N_L}\sum<b_{r_i}|x_l|b_{r_i}><br>\end{aligned}<br>$$<br>其中$|b_{l_i},b_{r_i}&gt;$表示的是粒子数表象下的态，这样的态总共有$4^{|\Lambda|}$个，我们用分成的左右态的张量积表示态空间，这样位于左边的态数目有$4^{|\Lambda|/2}$位于右边的$N_R=4^{|\Lambda|/2}$ </b_{r_i}|x_l|b_{r_i}></b_{l_i},b_{r_i}|x_r|b_{l_i},b_{r_i}></b_{l_i}|x_l|b_{l_i}></b_{l_i},b_{r_i}|x_l|b_{l_i},b_{r_i}></b_{r_i}|x_r|b_{r_i}></b_{l_i}|x_l|b_{l_i}></b_{l_i},b_{r_i}|x_lx_r|b_{l_i},b_{r_i}></p>
+<p>现在我们来证明不等式<br>$$<br>\begin{aligned}<br>&amp;\operatorname{tr}X=\sum \left\langle b_{l_i},b_{r_i}\right| X_LX_R\left| b_{l_i},b_{r_i}\right\rangle=\sum\left\langle b_{l_i}\right|X_L\left| b_{l_i}\right\rangle \sum \left\langle b_{r_i}\right| X_R\left|b_{r_i}\right\rangle \\<br>&amp;\operatorname{tr}X_L=\sum \left\langle b_{l_i},b_{r_i}\right| X_L\left| b_{l_i},b_{r_i}\right\rangle=\sum_{N_R}\sum\left\langle b_{l_i}\right|X_L\left| b_{l_i}\right\rangle \\<br>&amp;\operatorname{tr}X_R=\sum\left\langle b_{l_i},b_{r_i}\right|X_R\left| b_{l_i},b_{r_i}\right\rangle=\sum_{N_L}\sum\left\langle b_{r_i}\right|X_L\left| b_{r_i}\right\rangle<br>\end{aligned}<br>$$<br>其中$|b_{l_i},b_{r_i}&gt;​$表示的是粒子数表象下的态，这样的态总共有$4^{|\Lambda|}​$个，我们用分成的左右态的张量积表示态空间，这样位于左边的态数目有$4^{|\Lambda|/2}​$位于右边的$N_R=4^{|\Lambda|/2}​$ </p>
 <p>于是有<br>$$<br>4^{|\Lambda|}\operatorname{tr}X=(\operatorname{tr} X_L)(\operatorname{tr} X_R)<br>$$<br>由于左右两边的算符形式基本相同$c_l与c_r$ 几何反射对称, $V_L$与$V_R$反射对称, $A_L$与$\Theta(A_L)$反射对称,$\operatorname{tr} \Theta(X_L)=\operatorname{tr} X_L$，于是<br>$$<br>|\operatorname{tr} X_L|^2=4^{|\Lambda|}\operatorname{tr} X_L\Theta(X_L)<br>$$<br>我们知道$V^M$是由一些列$X$相加得到<br>$$<br>V^M=\sum_{\alpha} X^{\alpha}<br>$$<br>于是<br>$$<br>\begin{aligned}<br>|\operatorname{tr} V^M|^2<br>&amp;=|\sum_{\alpha}\operatorname{tr}  X^{\alpha}|^2\\<br>&amp;=4^{-2|\Lambda|}|\sum_{\alpha}\operatorname{tr}  X_L^{\alpha} X_R^{\alpha}|^2\\<br>&amp;\leq 4^{-2|\Lambda|}\sum_{\alpha}|\operatorname{tr}  X_L^{\alpha}|^2 \sum_{\alpha}|\operatorname{tr}X_R^{\alpha}|^2\\<br>&amp;= \sum_{\alpha}\operatorname{tr}  X_L^{\alpha}\Theta(X_L^{\alpha})\sum_{\alpha}\operatorname{tr}X_R^{\alpha}\Theta(X_R^{\alpha})\\<br>&amp;\to Z(H_L,\Theta(H_L))Z(\Theta(H_R),H_R)<br>\end{aligned}<br>$$<br>证毕</p>
 <h4 id="证明："><a href="#证明：" class="headerlink" title="证明："></a>证明：</h4><p>我们知道必然存在一个$[H_L,H_R]$组合使得$Z(H_L,H_R)$是最大的。此时由于我们知道<br>$$<br>Z(H_L,\Theta(H_L)) \leq Z_{max}<br>$$</p>
 <p>所以不等式<br>$$<br>Z(H_L,H_R)^2\leq  Z(H_L,\Theta(H_L))Z(\Theta(H_R),H_R)<br>$$</p>
