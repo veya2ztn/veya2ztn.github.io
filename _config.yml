@@ -81,8 +81,8 @@ author:
   avatar           : "you.png"
   bio              : "Pure and purge"
   location         : "Earth"
-  pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
-  googlescholar    : "http://yourfullgooglescholarurl.com"
+  pubmed           : 
+  googlescholar    : 
   email            : "zhangtianning110@gmail.com"
   researchgate     :  
   uri              :
