@@ -19,12 +19,12 @@
             let ctx = document.getElementById('myChart').getContext('2d');
 
             let imageA = new Image();
-            imageA.src = '../images/oni.jpg';  // Replace with your image path
+            imageA.src = '../images/oni.jpg';  
             let imageB = new Image();
-            imageB.src = '../images/technology.jpg';  // Replace with your image path
+            imageB.src = '../images/technology.jpg';  
             let imageC = new Image();
-            imageC.src = '../images/physics.jpg';  // Replace with your image path
-            let images = [imageA, imageB, imageC];  // Array of images
+            imageC.src = '../images/physics.jpg'; 
+            let images = [imageA, imageB, imageC];  
             var drawPlugin = {
                 id: 'draw',
                 beforeDraw: function (chart, args, options) {
@@ -64,21 +64,20 @@
                 },
             };
             Chart.register(drawPlugin);
-            // Make sure your images are loaded before creating the chart
+            
             imageA.onload = function () {
             imageB.onload = function () {
             imageC.onload = function () {
-                // Create patterns for your images
+               
                 let data = {
                     labels: ['A', 'B', 'C'],
                     datasets: [{
                         data: [1, 1, 1],
-                        // Use the patterns as background colors
-                        // backgroundColor: [patternA, patternB, patternC],
+                        
                         borderColor: [
-                            'rgba(255, 99, 132, 1)',  // Red
-                            'rgba(54, 162, 235, 1)',  // Blue
-                            'rgba(255, 206, 86, 1)'   // Yellow
+                            'rgba(255, 99, 132, 1)', 
+                            'rgba(54, 162, 235, 1)',  
+                            'rgba(255, 206, 86, 1)'   
                         ],
                         borderWidth: 5
                     }],
