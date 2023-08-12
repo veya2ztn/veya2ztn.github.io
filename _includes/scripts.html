@@ -1,6 +1,11 @@
 <script src="{{ base_path }}/assets/js/main.min.js"></script>
 <script>
+        let hasRun = false;
         window.onload = function() {
+            if (hasRun) {
+                console.log("Function has already run. It will not run again.");
+                return;
+            }
         let ctx = document.getElementById('myChart');
         let imageA = new Image();
         imageA.src = "{{ base_path }}/images/oni.jpg";  
@@ -118,6 +123,7 @@
             };
             };
             };
+        hasRun = true;
         }
 </script>
 {% include analytics.html %}
