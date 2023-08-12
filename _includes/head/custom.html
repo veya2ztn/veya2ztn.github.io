@@ -40,11 +40,11 @@
         window.onload = function() {
         let ctx = document.getElementById('myChart');
         let imageA = new Image();
-        imageA.src = "https://s2.loli.net/2023/08/12/lWgcaKm4rGUdYDH.jpg";  
+        imageA.src = "{{ base_path }}/images/oni.jpg";  
         let imageB = new Image();
-        imageB.src = "https://s2.loli.net/2023/08/12/zdoCFUZr8tBvL3M.webp"; 
+        imageB.src = "{{ base_path }}/images/technology.jpg"; 
         let imageC = new Image();
-        imageC.src = "https://s2.loli.net/2023/08/12/tZKJC9QxbApHwUm.jpg"; 
+        imageC.src = "{{ base_path }}/images/physics.jpg"; 
         let images = [imageA, imageB, imageC];  
         var drawPlugin = {
             id: 'draw',
