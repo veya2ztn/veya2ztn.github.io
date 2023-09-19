@@ -10,7 +10,7 @@ locale                   : "The blue planet"
 title                    : "Tianning Zhang"
 title_separator          : "-"
 url                      : https://veya2ztn.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
-repository               : "https://github.com/veya2ztn"
+repository               : "veya2ztn"
 teaser                   :  you.jpg
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
