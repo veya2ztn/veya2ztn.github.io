@@ -13,13 +13,13 @@ I am a Research Engineer at the [Shanghai AI Lab](https://www.shlab.org.cn/) and
 ## Interests
 
 - Physics
-  - Efficient computation tools for many body physics.
+  - Efficient computing tools for many body physics. (such as Tensor Network)
   - Theory about the high dimension tensor computing.
   - Metamaterial Design and Application.
 
 
 - Machine Learning
-  - AI for earth system: weather, quake and climate.
+  - AI for Earth system: weather, quake and climate.
   - Credible AI agent for knowledge retrieving and analyzing. 
   - Theory behind high dimension nonlinear computing.
 
