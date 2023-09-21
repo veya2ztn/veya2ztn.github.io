@@ -11,3 +11,22 @@ redirect_from:
 I am a Research Engineer at the [Shanghai AI Lab](https://www.shlab.org.cn/) and a Postdoctoral Fellow of The [Chinese University of Hong Kong](https://www.cuhk.edu.hk/english/index.html) (CUHK), working on the application of AI in scientific domains, including Numerical Weather Forecasting([Fengwu](https://arxiv.org/abs/2304.02948)), and developing autonomous agents for scientific research.
 
 Previously, I earned my Doctorate degree from the [Singapore University of Technology and Design](https://www.sutd.edu.sg/) (SUTD)  and my Master's degree from [Zhejiang University](https://www.zju.edu.cn/) (ZJU).
+
+## Interests
+
+- Physics
+  - Efficient computation tools for many body physics.
+  - Theory about the high dimension tensor computing.
+  - Metamaterial Design and Application.
+
+
+- Machine Learning
+  - AI for earth system: weather, quake and climate.
+  - Credible AI agent for knowledge retrieving and analyzing. 
+  - Theory behind high dimension nonlinear computing.
+
+- Gamming:
+  - Baldur's Gate 3 (Larian studios Series)
+  - Oxygen not included (Klei Entertainment Series)
+  - Stellaris (Paradox Development Studio)
+  - etc...
