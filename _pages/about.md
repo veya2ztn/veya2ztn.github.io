@@ -8,7 +8,7 @@ redirect_from:
   - /about/
   - /about.html
 ---
-I am a Researcher at the [Shanghai AI Lab](https://www.shlab.org.cn/) and a Postdoctoral Fellow of The [Chinese University of Hong Kong](https://www.cuhk.edu.hk/english/index.html) (CUHK), working on the application of AI in scientific domains, including Numerical Weather Forecasting([Fengwu](https://arxiv.org/abs/2304.02948)), and developing autonomous agents for scientific research.Previously, I earned my Doctorate degree from the [Singapore University of Technology and Design](https://www.sutd.edu.sg/) (SUTD)  and my Master's degree from [Zhejiang University](https://www.zju.edu.cn/) (ZJU). ([CV](http://academicpages.github.io/files/Resume_Tianning_Zhang.pdf))
+I am a Researcher at the [Shanghai AI Lab](https://www.shlab.org.cn/) and a Postdoctoral Fellow of The [Chinese University of Hong Kong](https://www.cuhk.edu.hk/english/index.html) (CUHK), working on the application of AI in scientific domains, including Numerical Weather Forecasting([Fengwu](https://arxiv.org/abs/2304.02948)), and developing autonomous agents for scientific research.Previously, I earned my Doctorate degree from the [Singapore University of Technology and Design](https://www.sutd.edu.sg/) (SUTD)  and my Master's degree from [Zhejiang University](https://www.zju.edu.cn/) (ZJU). ([CV](https://github.com/veya2ztn/veya2ztn.github.io/blob/simple_profile/files/Resume_Tianning_Zhang.pdf))
 
 ## Interests
 
